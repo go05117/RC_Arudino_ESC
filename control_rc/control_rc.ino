@@ -8,7 +8,8 @@ int count = 0;
 
 // 스피드 지정 96~177 속도 점점 증가 및 중간부터 풀스로틀
 // 정지 8~22
-int speeds[] = {8, 96, 97, 98, 99, 100};
+//int speeds[] = {8, 96, 97, 98, 99, 100};
+int speeds[] = {8, 97, 98, 99, 100, 101};
 
 // 각도 0, 14, 29, 44, 59, 74, 89(중립), 104, 119, 134, 149, 164, 179
 // directions[6]이 중앙 전진
@@ -24,31 +25,31 @@ void stop1() {
   delay(1);
 }
 
-// 전진 :: 속도 96
+// 전진 :: 속도 97
 void speed1() {
   esc.write(speeds[1]);
   delay(1);
 }
 
-// 전진 :: 속도 97
+// 전진 :: 속도 98
 void speed2() {
   esc.write(speeds[2]);
   delay(1);
 }
 
-// 전진 :: 속도 98
+// 전진 :: 속도 99
 void speed3() {
   esc.write(speeds[3]);
   delay(1);
 }
 
-// 전진 :: 속도 99
+// 전진 :: 속도 100
 void speed4() {
   esc.write(speeds[4]);
   delay(1);
 }
 
-// 전진 :: 속도 100
+// 전진 :: 속도 101
 void speed5() {
   esc.write(speeds[5]);
   delay(1);
@@ -64,10 +65,9 @@ void setup() {
 
   // bldc 모터, 서보 모터 초기화
   servo.write(89);
-  esc.write(95);
+  esc.write(8);
 
   delay(2500);
-
 }
 
 void loop() {
@@ -81,7 +81,7 @@ void loop() {
 //    delay(50);
 //  }
 
-//  Serial.println((String)"전방 조향");
-//  servo.write(89);
-//  delay(3000);
+  Serial.println((String)"전진");
+  speed2();
+  delay(3000);
 }
