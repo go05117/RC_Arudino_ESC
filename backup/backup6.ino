@@ -87,30 +87,18 @@ void loop() {
 //    delay(50);
 //  }
 
-  Serial.println((String)"전진 1단");
-  speedController(1);
-  delay(3000);
-  Serial.println((String)"전진 2단");
-  speedController(2);
-  delay(3000);
-  Serial.println((String)"전진 3단");
-  speedController(3);
-  delay(3000);
-  Serial.println((String)"전진 4단");
-  speedController(4);
-  delay(3000);
-  Serial.println((String)"전진 5단");
-  speedController(5);
-  delay(3000);
-  esc.write()
-  Serial.println((String)"브레이크");
-  speedController(0);
-  delay(3000);
+//  Serial.println((String)"전진");
+//  speedController(speeds[1]);
+//  delay(3000);
 
-//  Serial.println((String)"전진");
-//  speed1();
-//  delay(3000);
-//  Serial.println((String)"전진");
-//  speed2();
-//  delay(3000);
+  Serial.println((String)"전진");
+  speed1();
+  delay(3000);
+  Serial.println((String)"전진");
+  speed2();
+  delay(3000);
+  Serial.println((String)"전진");
+  speed3();
+  delay(3000);
+  Serial.println((String)"전진");
 }
