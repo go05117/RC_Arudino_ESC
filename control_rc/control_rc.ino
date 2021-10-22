@@ -51,7 +51,7 @@ void setup() {
 }
 
 void loop() {
-  // 시리얼 통신
+  // 시리얼 통신 
   // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
 //  input_data = Serial.readString();
 //
