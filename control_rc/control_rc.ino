@@ -53,28 +53,27 @@ void setup() {
 void loop() {
   // 시리얼 통신
   // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
-  input_data = Serial.readString();
-
-  String text = "";
-
-  if(input_data[0] == '0')
-  {
-//    Serial.println((String)"input Data1 : " + input_data[0]);
-    for (int i = 0; i < input_data.length()-1; i++) {
-      text += input_data[i];
-      Serial.println((String)"input Data1 : " + input_data[i]);
-    }
-    Serial.println((String)"input Data1 length : " + input_data.length());
-    delay(1000);
-  }
-  else
-  {
-    Serial.println((String)"input Data2 : " + input_data);
-    delay(1000);
-  }
-
-  Serial.println((String)"text : " + text);
-  text = "";
+//  input_data = Serial.readString();
+//
+//  String text = "";
+//
+//  if(input_data[0] == '0')
+//  {
+//    for (int i = 0; i < input_data.length()-1; i++) {
+//      text += input_data[i];
+//      Serial.println((String)"input Data1 : " + input_data[i]);
+//    }
+//    Serial.println((String)"input Data1 length : " + input_data.length());
+//    delay(1000);
+//  }
+//  else
+//  {
+//    Serial.println((String)"input Data2 : " + input_data);
+//    delay(1000);
+//  }
+//
+//  Serial.println((String)"text : " + text);
+//  text = "";
   
   // 15초 테스트를 위한 코드
 //  unsigned long now = millis(); // 현재 시간을 저장
@@ -93,14 +92,14 @@ void loop() {
 //  }
 
   // 외부 전방 전진 각도 수정을 위한 코드
-//  Serial.println((String)"전진 1단");
-//  speedController(1);
-//  delay(3000);
-//  Serial.println((String)"조향 좌1단");
-//  speedController(3);   // 조향할 때 속도 조절 시 +2단 +3단 어떤 속도가 나은가
-//  directionController(0);
-//  delay(5000);
-//  Serial.println((String)"조향 전방");
-//  directionController(6);
-//  delay(3000);
+  Serial.println((String)"전진 1단");
+  speedController(1);
+  delay(3000);
+  Serial.println((String)"조향 좌1단");
+  speedController(3);   // 조향할 때 속도 조절 시 +2단 +3단 어떤 속도가 나은가
+  directionController(0);
+  delay(5000);
+  Serial.println((String)"조향 전방");
+  directionController(6);
+  delay(3000);
 }
