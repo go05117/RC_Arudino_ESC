@@ -1,4 +1,4 @@
-#include <Servo.h> 
+#include <Servo.h>
 
 int escPin = 5;   // esc 일반 모터 핀 번호
 int servoPin = 9; // 서보 모터 핀 번호
