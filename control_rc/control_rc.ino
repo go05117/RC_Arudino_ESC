@@ -92,14 +92,19 @@ void loop() {
 //  }
 
   // 외부 전방 전진 각도 수정을 위한 코드
-  Serial.println((String)"전진 1단");
+//  Serial.println((String)"전진 1단");
+//  speedController(1);
+//  directionController(6);
+//  delay(3000);
+//  Serial.println((String)"조향 좌1단");
+//  speedController(8);   // 조향할 때 속도 조절 시 +2단 +3단 어떤 속도가 나은가
+//  directionController(3);
+//  delay(2000);
+
+  // 코너 돌기 코드
   speedController(1);
-  delay(3000);
-  Serial.println((String)"조향 좌1단");
-  speedController(3);   // 조향할 때 속도 조절 시 +2단 +3단 어떤 속도가 나은가
-  directionController(0);
-  delay(5000);
-  Serial.println((String)"조향 전방");
+  directionController(5);
+  delay(190);
   directionController(6);
-  delay(3000);
+  delay(1000);
 }
