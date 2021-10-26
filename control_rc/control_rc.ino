@@ -18,6 +18,8 @@ int pos = 0;
 int directions[] = {0, 14, 29, 44, 59, 74, 89, 104, 119, 134, 149, 164, 179};
 
 String input_data;
+int current_speed = 1;
+int current_direction = 6;
 
 Servo esc;
 Servo servo;
@@ -53,27 +55,38 @@ void setup() {
 void loop() {
   // 시리얼 통신 
   // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
-//  input_data = Serial.readString();
-//
-//  String text = "";
-//
-//  if(input_data[0] == '0')
-//  {
-//    for (int i = 0; i < input_data.length()-1; i++) {
-//      text += input_data[i];
-//      Serial.println((String)"input Data1 : " + input_data[i]);
-//    }
-//    Serial.println((String)"input Data1 length : " + input_data.length());
-//    delay(1000);
-//  }
-//  else
-//  {
-//    Serial.println((String)"input Data2 : " + input_data);
-//    delay(1000);
-//  }
-//
-//  Serial.println((String)"text : " + text);
-//  text = "";
+  input_data = Serial.readString();
+
+  String text = "";
+
+  if(input_data[0] == '0')
+  {
+    // Enter값이 들어가는 여부 확인 후 length-1 조절 필요
+    // 나중에 코드 최적화할 거임
+    for (int i = 1; i < input_data.length()-1; i++) {
+      text += input_data[i];
+      Serial.println((String)"input Speed Data : " + input_data[i]);
+    }    
+    current_speed = text.toInt();
+    speedController(current_speed);
+  }
+  else if(input_data[0] == '1')
+  {
+    for (int i = 1; i < input_data.length()-1; i++) {
+      text += input_data[i];
+      Serial.println((String)"input Direction Data : " + input_data[i]);
+    }    
+    current_direction = text.toInt();
+    directionController(current_direction);
+  }
+  else
+  {
+    Serial.println((String)"아무 값도 없으니 현행값 유지" + input_data);
+  }
+
+  delay(1000);
+  Serial.println((String)"text : " + text);
+  text = "";
   
   // 15초 테스트를 위한 코드
 //  unsigned long now = millis(); // 현재 시간을 저장
@@ -102,9 +115,9 @@ void loop() {
 //  delay(2000);
 
   // 코너 돌기 코드
-  speedController(1);
-  directionController(5);
-  delay(190);
-  directionController(6);
-  delay(1000);
+//  speedController(1);
+//  directionController(5);
+//  delay(190);
+//  directionController(6);
+//  delay(1000);
 }
