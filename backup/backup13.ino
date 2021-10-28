@@ -1,4 +1,4 @@
-\#include <Servo.h> 
+#include <Servo.h> 
 
 int escPin = 5;   // esc 일반 모터 핀 번호
 int servoPin = 9; // 서보 모터 핀 번호
@@ -39,7 +39,6 @@ void directionController(int directionStatus) {
 
 void setup() {
   Serial.begin(9600);
-//  Serial.setTimeout(100);
   pinMode(servoPin, OUTPUT);
   pinMode(escPin, OUTPUT);
   
@@ -50,7 +49,7 @@ void setup() {
   servo.write(89);
   esc.write(95);
 
-//  delay(1500);
+  delay(1500);
 }
 
 void loop() {
@@ -59,8 +58,6 @@ void loop() {
   input_data = Serial.readString();
 
   String text = "";
-
-  Serial.println((String)"input Data " + input_data);
 
   if(input_data[0] == '0')
   {
@@ -87,7 +84,7 @@ void loop() {
     Serial.println((String)"아무 값도 없으니 현행값 유지" + input_data);
   }
 
-
+  delay(1000);
   Serial.println((String)"text : " + text);
   text = "";
   
