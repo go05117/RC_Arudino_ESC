@@ -91,5 +91,20 @@ void loop() {
   
     Serial.println((String)"text : " + text);
     text = "";
+    
+    // 15초 테스트를 위한 코드
+//    unsigned long now = millis(); // 현재 시간을 저장
+//    if(now >= 15000){ 
+//      Serial.println((String)"15초란다 친구야");
+//      delay(500);
+//      exit(0);
+//    }
+  
+    // 코너 돌기 코드
+//    speedController(1);
+//    directionController(5);
+//    delay(190);
+//    directionController(6);
+//    delay(1000);
   }
 }
