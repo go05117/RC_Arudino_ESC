@@ -1,7 +1,12 @@
 #include <Servo.h>
+#include <SoftwareSerial.h>
 
 int escPin = 5;   // esc 일반 모터 핀 번호
 int servoPin = 9; // 서보 모터 핀 번호
+
+// 카운팅용 변수
+int count = 0;
+unsigned long past = 0; // 과거 시간 저장 변수
 
 // 스피드 지정 96~177 속도 점점 증가 및 중간부터 풀스로틀
 // 정지 8~22
@@ -9,6 +14,7 @@ int speeds[] = {8, 100, 101, 102, 103, 104};
 
 // 각도 0, 14, 29, 44, 59, 74, 89(중립), 104, 119, 134, 149, 164, 179
 // directions[6]이 중앙 전진
+int pos = 0;
 // 좌6단, 전진(6), 우6단
 int directions[] = {0, 14, 29, 44, 59, 74, 89, 104, 119, 134, 149, 164, 179};
 
@@ -49,6 +55,7 @@ void setup() {
 }
 
 void loop() {
+
   while(Serial.available() > 0) {
     // 시리얼 통신 
     // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
@@ -80,7 +87,7 @@ void loop() {
     }
     else
     {
-      Serial.println((String)"There's no value, so keep the current : " + input_data);
+      Serial.println((String)"아무 값도 없으니 현행값 유지" + input_data);
     }
   
     Serial.println((String)"text : " + text);
