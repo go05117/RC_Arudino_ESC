@@ -45,7 +45,7 @@ void setup() {
   servo.write(89);
   esc.write(95);
 
-//  delay(1500);
+//  delay(1500); 
 }
 
 void loop() {
