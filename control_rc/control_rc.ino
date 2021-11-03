@@ -12,6 +12,9 @@ int speeds[] = {8, 100, 101, 102, 103, 104};
 // 좌6단, 전진(6), 우6단
 int directions[] = {0, 14, 29, 44, 59, 74, 89, 104, 119, 134, 149, 164, 179};
 
+// 현재 속도 또는 조향 값
+String text = "";
+
 String input_data;
 int current_speed = 1;
 int current_direction = 6;
@@ -29,7 +32,8 @@ void speedController(int speedStatus) {
 void directionController(int directionStatus) {
 //  speedController(3);
   servo.write(directions[directionStatus]);
-  delay(1);
+  delay(190);
+  servo.write(directions[6]);
 }
 
 void setup() {
@@ -53,8 +57,6 @@ void loop() {
     // 시리얼 통신 
     // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
     input_data = Serial.readString();
-  
-    String text = "";
   
     Serial.println((String)"input Data " + input_data);
   
@@ -83,7 +85,8 @@ void loop() {
       Serial.println((String)"There's no value, so keep the current : " + input_data);
     }
   
-    Serial.println((String)"text : " + text);
+//    Serial.println((String)"text : " + text);
+    Serial.println(text);
     text = "";
   }
 }
