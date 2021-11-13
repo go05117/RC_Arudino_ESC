@@ -157,7 +157,7 @@ void loop() {
       if(input_data[0] == '1')
       {
         // Enter값이 들어가는 여부 확인 후 length-1 조절 필요
-        for (int i = 1; i < input_data.length()-1; i++) {
+        for (int i = 1; i < input_data.length(); i++) {
           text += input_data[i];
           Serial.println((String)"input Speed Data : " + input_data[i]);
           Serial.println((String)"current_break : " + current_break);
@@ -172,7 +172,7 @@ void loop() {
       }
       else if(input_data[0] == '2')
       {
-        for (int i = 1; i < input_data.length()-1; i++) {
+        for (int i = 1; i < input_data.length(); i++) {
           text += input_data[i];
           Serial.println((String)"input Direction Data : " + input_data[i]);
         }    
