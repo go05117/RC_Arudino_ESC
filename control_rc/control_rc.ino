@@ -15,10 +15,11 @@ int speeds[] = {8, 97, 98, 99, 100, 101};       // 교실 내 테스트 시 속�
 int directions[] = {0, 14, 29, 44, 59, 74, 89, 104, 119, 134, 149, 164, 179};
 
 // 현재 속도 또는 조향 값
-String input_data;          // 시리얼 통신으로 받아온 데이터
-String text = "";           // 시리얼 통신으로 받아온 데이터에서 속도 또는 조향값 따로 받는 변수
-int current_speed = 1;      // 현재 속도 값
-int current_direction = 6;  // 현재 조향 값
+String input_data;              // 시리얼 통신으로 받아온 데이터
+String text = "";               // 시리얼 통신으로 받아온 데이터에서 속도 또는 조향값 따로 받는 변수
+int current_speed = 1;          // 현재 속도 값
+int current_direction = 6;      // 현재 조향 값
+int current_break = 0;          // 현재 브레이크 유무
 
 //***************************** 초음파 센서 *****************************//
 // 전방
@@ -74,65 +75,71 @@ void setup() {
   pinMode(echo2, INPUT);
   pinMode(trig3, OUTPUT);
   pinMode(echo3, INPUT);
-
-  esc.write(speeds[1]);
-
+  
+//  speedController(1);
 //  delay(1500); 
 }
 
 void loop() {
   while(true) {
-    // 초음파 센서 정면
-    digitalWrite(trig1, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig1, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig1, LOW);
-  
-    duration = pulseIn(echo1, HIGH); //물체에 반사되어돌아온 초음파의 시간을 변수에 저장합니다.
-    distanceC = duration * 17 / 1000; 
-  
-    Serial.print("\n정면 : ");
-    Serial.print(distanceC); //측정된 물체로부터 거리값(cm값)
-    Serial.println(" Cm");
-  
-  
-    // 초음파 센서 우측
-    digitalWrite(trig2, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig2, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig2, LOW);
-  
-    duration = pulseIn(echo2, HIGH);
-    distanceR = duration * 17 / 1000;
-  
-    Serial.print("\n우측 : ");
-    Serial.print(distanceR);
-    Serial.println(" Cm");
-  
-  
-    // 초음파 센서 좌측
-    digitalWrite(trig3, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig3, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig3, LOW);
-  
-    duration = pulseIn(echo3, HIGH);
-    distanceL = duration * 17 / 1000;
-  
-    Serial.print("\n좌측 : ");
-    Serial.print(distanceL);
-    Serial.println(" Cm");
-    Serial.println("--------------------------------------");
-    delay(1000);
-    if(distanceC < distance || distanceR < distance || distanceL < distance) {
-//        speedController(0);
-        esc.write(speeds[0]);
-        Serial.println("Stop it!!");
-        break;
-      }
+    if (current_break == 0) {
+      Serial.println((String)"current_break : " + current_break);   // 현재 브레이크 유무
+      
+      // 초음파 센서 정면
+      digitalWrite(trig1, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trig1, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trig1, LOW);
+    
+      duration = pulseIn(echo1, HIGH); //물체에 반사되어돌아온 초음파의 시간을 변수에 저장합니다.
+      distanceC = duration * 17 / 1000; 
+    
+      Serial.print("\n정면 : ");
+      Serial.print(distanceC); //측정된 물체로부터 거리값(cm값)
+      Serial.println(" Cm");
+    
+    
+      // 초음파 센서 우측
+      digitalWrite(trig2, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trig2, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trig2, LOW);
+    
+      duration = pulseIn(echo2, HIGH);
+      distanceR = duration * 17 / 1000;
+    
+      Serial.print("\n우측 : ");
+      Serial.print(distanceR);
+      Serial.println(" Cm");
+    
+    
+      // 초음파 센서 좌측
+      digitalWrite(trig3, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trig3, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trig3, LOW);
+    
+      duration = pulseIn(echo3, HIGH);
+      distanceL = duration * 17 / 1000;
+    
+      Serial.print("\n좌측 : ");
+      Serial.print(distanceL);
+      Serial.println(" Cm");
+      Serial.println("--------------------------------------");
+      delay(100);
+      
+      if(distanceC < distance || distanceR < distance || distanceL < distance) {
+          speedController(0);
+          Serial.println("Stop it!!");
+          break;
+        } else {
+          // 마지막으로 들어갔던 속도 기억 및 출발
+          speedController(current_speed);
+        }
+    }
     
     while(Serial.available() > 0) {
       if(distanceC < distance || distanceR < distance || distanceL < distance) {
@@ -152,9 +159,15 @@ void loop() {
         for (int i = 1; i < input_data.length()-1; i++) {
           text += input_data[i];
           Serial.println((String)"input Speed Data : " + input_data[i]);
+          Serial.println((String)"current_break : " + current_break);
         }    
         current_speed = text.toInt();
         speedController(current_speed);
+        if(current_speed == 0) {
+            current_break = 1;
+          } else if(1 || 2 || 3 || 4 || 5) {
+            current_break = 0;
+          }
       }
       else if(input_data[0] == '2')
       {
