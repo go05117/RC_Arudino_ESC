@@ -193,7 +193,7 @@ void loop() {
       }
       else if(input_data[1] == '2')
       {
-        Serial.print((String)input_data);
+        Serial.println((String)input_data);
         for (int i = 2; i < input_data.length()-1; i++) {
           text += input_data[i];
         Serial.println((String)"input Direction Data : " + input_data[i]);
