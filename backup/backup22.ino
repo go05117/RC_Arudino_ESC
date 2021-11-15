@@ -7,8 +7,8 @@ int servoPin = 9; // 서보 모터 핀 번호
 //***************************** 변속 & 조향 조정 *****************************//
 // 스피드 지정 96~177 속도 점점 증가 및 중간부터 풀스로틀
 // 정지 8~22
-//int speeds[] = {8, 100, 101, 102, 103, 104};    // 실전 속도 코드
-int speeds[] = {8, 97, 98, 99, 100, 101};       // 교실 내 테스트 시 속도 조절 코드
+int speeds[] = {8, 100, 101, 102, 103, 104};    // 실전 속도 코드
+//int speeds[] = {8, 97, 98, 99, 100, 101};       // 교실 내 테스트 시 속도 조절 코드
 
 // 각도 0, 14, 29, 44, 59, 74, 89(중립), 104, 119, 134, 149, 164, 179
 // directions[6]이 중앙 전진 => 좌6단, 전진(6), 우6단
@@ -17,10 +17,7 @@ int speeds[] = {8, 97, 98, 99, 100, 101};       // 교실 내 테스트 시 속�
 int directions[] = {59, 64, 69, 74, 79, 84, 89, 94, 99, 104, 109, 114, 119};      // 5도씩
 
 // 현재 속도 또는 조향 값
-String input_datas;             // 시리얼 통신으로 받아온 데이터
-int save_input = 0;             // input_datas에서 데이터를 저장할지 말지 boolean
-String charge_data;             // input_data에 저장할 값 임시 저장소
-String input_data;              // input_datas에서 필요한 값만 추출한 데이터
+String input_data;              // 시리얼 통신으로 받아온 데이터
 String text = "";               // 시리얼 통신으로 받아온 데이터에서 속도 또는 조향값 따로 받는 변수
 int current_speed = 1;          // 현재 속도 값
 int current_direction = 6;      // 현재 조향 값
@@ -155,48 +152,31 @@ void loop() {
       
       // 시리얼 통신 
       // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
-      input_datas = Serial.readString();
-
-      for(int i = 0; i < input_datas.length(); i++) {
-        if(save_input == 0 && input_datas[i] == '/') {
-          save_input = 1;
-        }
-        
-        if(save_input == 1) {
-          charge_data = charge_data + input_datas[i];
-        }
-
-        if(save_input == 1 && input_datas[i] == '*') {
-          save_input = 0;
-          input_data = charge_data;
-          charge_data = "";
-        }
-      }
-
-      if(input_data[1] == '1')
+      input_data = Serial.readString();
+    
+      Serial.println((String)"input Data " + input_data);
+    
+      if(input_data[0] == '1')
       {
-        Serial.println((String)"current_break : " + current_break);
-
-        Serial.println((String)input_data);
         // Enter값이 들어가는 여부 확인 후 length-1 조절 필요
-        for (int i = 2; i < input_data.length()-1; i++) {
+        for (int i = 1; i < input_data.length()-1; i++) {
           text += input_data[i];
           Serial.println((String)"input Speed Data : " + input_data[i]);
+          Serial.println((String)"current_break : " + current_break);
         }    
         current_speed = text.toInt();
         speedController(current_speed);
         if(current_speed == 0) {
-          current_break = 1;
-        } else if(1 || 2 || 3 || 4 || 5) {
-          current_break = 0;
-        }
+            current_break = 1;
+          } else if(1 || 2 || 3 || 4 || 5) {
+            current_break = 0;
+          }
       }
-      else if(input_data[1] == '2')
+      else if(input_data[0] == '2')
       {
-        Serial.print((String)input_data);
-        for (int i = 2; i < input_data.length()-1; i++) {
+        for (int i = 1; i < input_data.length()-1; i++) {
           text += input_data[i];
-        Serial.println((String)"input Direction Data : " + input_data[i]);
+          Serial.println((String)"input Direction Data : " + input_data[i]);
         }    
         current_direction = text.toInt();
         directionController(current_direction);
@@ -208,7 +188,6 @@ void loop() {
     
       Serial.println((String)"text : " + text);
       text = "";
-      Serial.println("--------------------------------------");
     }
   }
 }
