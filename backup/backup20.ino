@@ -1,4 +1,5 @@
 #include <Servo.h>
+//    Serial.println((String)"/data* : " + current_break);
 
 //***************************** 핀 번호 *****************************//
 int escPin = 5;   // esc 일반 모터 핀 번호
@@ -36,6 +37,9 @@ int echo3 = 6;
 
 // 초음파 변수 설정(초음파 부딪혔다 오는 속도, 정면 거리, 우측 거리, 좌측 거리)
 long duration, distanceC, distanceR, distanceL;
+//long duration, distances
+int distances[3];     // 초음파 정면, 우측, 좌측 거리 담는 배열
+int usCount = 0;
 
 // 초음파 센서 정지 거리(cm)
 //int distance = 60;
@@ -56,6 +60,24 @@ void directionController(int directionStatus) {
   servo.write(directions[directionStatus]);
   delay(190);
   servo.write(directions[6]);
+}
+
+// 초음파 센서 인식 코드
+void ultraSound(int trig, int echo, String where) {
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+    
+  duration = pulseIn(echo, HIGH); // 물체에 반사되어돌아온 초음파의 시간을 변수에 저장합니다.
+  Serial.println("usCount : " + usCount);
+  distances[usCount] = duration * 17 / 1000;
+  Serial.println("distances : " + distances[usCount]);
+  
+  Serial.print(where + " : " + distances[usCount]); // 측정된 물체로부터 거리값(cm값)
+  Serial.println(" Cm");
+  usCount = usCount + 1;
 }
 
 void setup() {
@@ -88,53 +110,13 @@ void loop() {
     if (current_break == 0) {
       Serial.println((String)"current_break : " + current_break);   // 현재 브레이크 유무
       
-      // 초음파 센서 정면
-      digitalWrite(trig1, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig1, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig1, LOW);
-    
-      duration = pulseIn(echo1, HIGH); //물체에 반사되어돌아온 초음파의 시간을 변수에 저장합니다.
-      distanceC = duration * 17 / 1000; 
-    
-      Serial.print("\n정면 : ");
-      Serial.print(distanceC); //측정된 물체로부터 거리값(cm값)
-      Serial.println(" Cm");
-    
-    
-      // 초음파 센서 우측
-      digitalWrite(trig2, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig2, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig2, LOW);
-    
-      duration = pulseIn(echo2, HIGH);
-      distanceR = duration * 17 / 1000;
-    
-      Serial.print("\n우측 : ");
-      Serial.print(distanceR);
-      Serial.println(" Cm");
-    
-    
-      // 초음파 센서 좌측
-      digitalWrite(trig3, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trig3, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trig3, LOW);
-    
-      duration = pulseIn(echo3, HIGH);
-      distanceL = duration * 17 / 1000;
-    
-      Serial.print("\n좌측 : ");
-      Serial.print(distanceL);
-      Serial.println(" Cm");
+      ultraSound(trig1, echo1, "정면");  // 초음파 센서 정면
+      ultraSound(trig2, echo2, "우측");  // 초음파 센서 우측
+      ultraSound(trig3, echo3, "좌측");  // 초음파 센서 좌측
       Serial.println("--------------------------------------");
       delay(500);
       
-      if(distanceC < distance || distanceR < distance || distanceL < distance) {
+      if(distances[0] < distance || distances[1] < distance || distances[2] < distance) {
           speedController(0);
           Serial.println("Stop it!!");
           break;
@@ -142,10 +124,11 @@ void loop() {
           // 마지막으로 들어갔던 속도 기억 및 출발
           speedController(current_speed);
         }
+        usCount = 0;  // 초음파 센서 배열 인덱스 번호 초기화
     }
     
     while(Serial.available() > 0) {
-      if(distanceC < distance || distanceR < distance || distanceL < distance) {
+      if(distances[0] < distance || distances[1] < distance || distances[2] < distance) {
         String garbage = Serial.readString();   // 필요없는 Serial 데이터 버리기
         break;
       }
@@ -154,7 +137,7 @@ void loop() {
       // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
       input_data = Serial.readString();
     
-      Serial.println((String)"/data* : " + input_data);
+      Serial.println((String)"input Data " + input_data);
     
       if(input_data[0] == '1')
       {
@@ -188,7 +171,6 @@ void loop() {
     
       Serial.println((String)"text : " + text);
       text = "";
-      Serial.println("--------------------------------------");
     }
   }
 }
