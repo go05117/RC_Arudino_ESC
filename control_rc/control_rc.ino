@@ -136,7 +136,7 @@ void loop() {
       Serial.print(distanceL);
       Serial.println(" Cm");
       Serial.println("--------------------------------------");
-      delay(2000);
+      delay(100);
       
       if(distanceC < distance || distanceR < distance || distanceL < distance) {
           speedController(0);
