@@ -212,8 +212,6 @@ void loop() {
           Serial.println((String)"/2" + current_direction + "*");
           directionController(current_direction);
           charge_data = charge_once;
-          Serial.println("Charge_data : " + charge_data);
-          Serial.println("Charge_once : " + charge_once);
         }
         text = "";
       }
