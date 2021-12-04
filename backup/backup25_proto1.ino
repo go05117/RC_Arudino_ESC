@@ -7,7 +7,7 @@ int servoPin = 9; // 서보 모터 핀 번호
 //***************************** 변속 & 조향 조정 *****************************//
 // 스피드 지정 96~177 속도 점점 증가 및 중간부터 풀스로틀
 // 정지 8~22
-int speeds[] = {8, 101, 96, 102, 103, 104};    // 실전 속도 코드
+int speeds[] = {8, 100, 96, 101, 102, 103};    // 실전 속도 코드
 //int speeds[] = {8, 101, 102, 103, 104, 105};    // 실전 속도 코드
 //int speeds[] = {8, 100, 101, 102, 103, 104};    // 실전 속도 코드 - 1단 속도 부족
 //int speeds[] = {8, 97, 98, 99, 100, 101};       // 교실 내 테스트 시 속도 조절 코드
@@ -19,15 +19,16 @@ int speeds[] = {8, 101, 96, 102, 103, 104};    // 실전 속도 코드
 int directions[] = {59, 64, 69, 74, 79, 84, 89, 94, 99, 104, 109, 114, 119};      // 5도씩
 
 // 현재 속도 또는 조향 값
-String input_datas;             // 시리얼 통신으로 받아온 데이터
-int save_input = 0;             // input_datas에서 데이터를 저장할지 말지 boolean
-int is_play = 0;                // 실행 여부
-String charge_once;             // input_data에 저장할 값 한 단위
-String charge_data;             // input_data에 저장할 값 임시 저장소
-String input_data;              // input_datas에서 필요한 값만 추출한 데이터
-String text = "";               // 시리얼 통신으로 받아온 데이터에서 속도 또는 조향값 따로 받는 변수
-int current_speed = 1;          // 현재 속도 값
-int current_direction = 6;      // 현재 조향 값
+String input_datas;                     // 시리얼 통신으로 받아온 데이터
+String datas_array[3] = {"", "", ""};   // 들어온 시리얼 데이터를 /data*단위로 담을 그릇
+int save_input = 0;                     // input_datas에서 데이터를 저장할지 말지 boolean
+int is_play = 0;                        // 실행 여부
+String charge_once;                     // input_data에 저장할 값 한 단위
+String charge_data;                     // input_data에 저장할 값 임시 저장소
+String input_data;                      // input_datas에서 필요한 값만 추출한 데이터
+String text = "";                       // 시리얼 통신으로 받아온 데이터에서 속도 또는 조향값 따로 받는 변수
+int current_speed = 1;                  // 현재 속도 값
+int current_direction = 6;              // 현재 조향 값
 
 Servo esc;
 Servo servo;
@@ -69,6 +70,30 @@ void loop() {
       // 시리얼 통신 
       // 스레드 지원 X : 스레드를 읽고 값이 있으면 반영, 없으면 예외처리
       input_datas = Serial.readString();
+
+//      if(input_datas.length() > 14) {
+//        int counting = 0;
+//        for(int i = 0; i < input_datas.length(); i++) {
+//          if(save_input == 0 && input_datas[i] == '/') {
+//            save_input = 1;
+//          }
+//          
+//          if(save_input == 1) {
+//            charge_once = charge_once + input_datas[i];
+//            charge_data = charge_data + input_datas[i];
+//          }
+//  
+//          if(save_input == 1 && input_datas[i] == '*') {
+//            Serial.println();
+//            is_play = 1;
+//            save_input = 0;
+//            datas_array[counting] = charge_once;
+//            counting++;
+//            charge_once = "";
+//            input_data = charge_data;
+//          }
+//        }
+//      }
 
       for(int i = 0; i < input_datas.length(); i++) {
         if(save_input == 0 && input_datas[i] == '/') {
