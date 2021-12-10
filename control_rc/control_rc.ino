@@ -47,7 +47,7 @@ void speedController(int speedStatus) {
 void directionController(int directionStatus) {
 //  speedController(3);
   servo.write(directions[directionStatus]);
-  if (1 < directionStatus && directionStatus < 11) {
+  if (4 < directionStatus && directionStatus < 8) {
     delay(100);
     servo.write(directions[6]);
   }
