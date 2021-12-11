@@ -103,34 +103,21 @@ void loop() {
             break;
           }
         }
-
-        input_data = "";
-        int inputCount = 0;
-        for(int i = temp_data.length()-1; i >= 0; i--) {
-          input_data += temp_data[i];
-          inputCount++;
-        }
-      } else {
-        for(int i = 0; i < input_datas.length(); i++) {
-          if(save_input == 0 && input_datas[i] == '/') {
-            save_input = 1;
-          }
-          
-          if(save_input == 1) {
-            charge_once = charge_once + input_datas[i];
-            charge_data = charge_data + input_datas[i];
-          }
-  
-          if(save_input == 1 && input_datas[i] == '*') {
-            Serial.println();
-            is_play = 1;
-            save_input = 0;
-            charge_once = "";
-            input_data = charge_data;
-          }
-        }
       }
 
+//      Serial.println("charge_data : " + charge_data);
+//      Serial.println("temp_data : " + temp_data);
+//      Serial.println(temp_data.length());
+
+      input_data = "";
+      int inputCount = 0;
+      for(int i = temp_data.length()-1; i >= 0; i--) {
+//        Serial.println(temp_data[i]);
+        input_data += temp_data[i];
+        inputCount++;
+      }
+
+//      Serial.println("input_data : " + input_data);
 
       for(int a = 0; a < input_data.length(); a++) {
         if(is_play == 1 && input_data[a] == '/' && input_data[a+1] == '1')
@@ -163,7 +150,7 @@ void loop() {
         text = "";
       }
       is_play = 0;
-//      Serial.println("--------------------------------------");
+      Serial.println("--------------------------------------");
     }
   }
 }
